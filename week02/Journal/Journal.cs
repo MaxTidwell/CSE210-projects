@@ -66,14 +66,12 @@ public class Journal
         _entries.Clear();
         string[] lines = System.IO.File.ReadAllLines(filename);
 
-        //foreach (string line in lines)
-        //{
-        //    Entry entry = Entry.FromFileString(line);
-        //    if (entry != null)
-        //    {
-        //        _entries.Add(entry);
-        //    }
-        //}
+        foreach (string line in lines)
+        {
+            Entry entry = Entry.FromFileString(line);
+            if (entry != null)
+            {_entries.Add(entry);}
+        }
 
         Console.WriteLine($"Journal loaded from {filename}\n");
     }

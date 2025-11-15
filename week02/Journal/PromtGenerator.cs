@@ -12,7 +12,11 @@ public class PromptGenerator
         "If I had one thing I could do over today, what would it be?",
         "What is one thing I learned today?",
         "What made me smile today?",
-        "What challenge did I face today and how did I handle it?"
+        "What challenge did I face today and how did I handle it?",
+        "What is something that energized me today?",
+        "What was my greatest accomplishment today?",
+        "What is one goal I want to work toward right now?",
+        "How did I connect with others today?"
     };
 
     private Random _random = new Random();
