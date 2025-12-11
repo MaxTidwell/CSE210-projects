@@ -1,3 +1,5 @@
+using System;
+
 public class SimpleGoal : Goal
 {
     public bool IsCompleteFlag { get; set; }

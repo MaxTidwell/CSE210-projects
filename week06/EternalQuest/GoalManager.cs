@@ -2,15 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-class Program
-{
-    static void Main(string[] args)
-    {
-        GoalManager manager = new GoalManager();
-        manager.Start();
-    }
-}
-
 public class GoalManager
 {
     private List<Goal> _goals = new List<Goal>();
@@ -78,13 +69,11 @@ public class GoalManager
         string desc = Console.ReadLine();
 
         Console.Write("Points: ");
-        
         if (!int.TryParse(Console.ReadLine(), out int pts))
         {
-            Console.WriteLine("Invalid points.");
+            Console.WriteLine("Invalid points. Goal not created.");
             return;
         }
-
 
         switch (type)
         {
@@ -132,7 +121,6 @@ public class GoalManager
             {
                 _score += checklist.Bonus;
             }
-
         }
     }
 
