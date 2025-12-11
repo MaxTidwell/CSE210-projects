@@ -1,24 +1,25 @@
-using System;
-
 public class SimpleGoal : Goal
 {
-    private bool _isComplete;
+    public bool IsCompleteFlag { get; set; }
 
-    public SimpleGoal(string name, string description, string points)
+    public SimpleGoal(string name, string description, int points)
         : base(name, description, points)
     {
-        _isComplete = false;
+        IsCompleteFlag = false;
     }
 
     public override void RecordEvent()
     {
-        _isComplete = true;
+        IsCompleteFlag = true;
     }
 
-    public override bool IsComplete() => _isComplete;
+    public override bool IsComplete() => IsCompleteFlag;
 
-    public override string GetDetailsString() => $"{_shortName}: {_description}";
+    public override string GetDetailsString() => $"{_name}: {_description}";
 
     public override string GetStringRepresentation() =>
-        $"{(_isComplete ? "[X]" : "[ ]")} {_shortName} ({_points} pts)";
+        $"{(IsCompleteFlag ? "[X]" : "[ ]")} {_name} ({_points} pts)";
+
+    public override string Serialize() =>
+        $"Simple|{_name}|{_description}|{_points}|{IsCompleteFlag}";
 }

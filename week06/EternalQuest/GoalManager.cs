@@ -2,6 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+class Program
+{
+    static void Main(string[] args)
+    {
+        GoalManager manager = new GoalManager();
+        manager.Start();
+    }
+}
+
 public class GoalManager
 {
     private List<Goal> _goals = new List<Goal>();
@@ -67,8 +76,15 @@ public class GoalManager
         string name = Console.ReadLine();
         Console.Write("Description: ");
         string desc = Console.ReadLine();
+
         Console.Write("Points: ");
-        string pts = Console.ReadLine();
+        
+        if (!int.TryParse(Console.ReadLine(), out int pts))
+        {
+            Console.WriteLine("Invalid points.");
+            return;
+        }
+
 
         switch (type)
         {
@@ -80,9 +96,17 @@ public class GoalManager
                 break;
             case "3":
                 Console.Write("Target count: ");
-                int target = int.Parse(Console.ReadLine());
+                if (!int.TryParse(Console.ReadLine(), out int target))
+                {
+                    Console.WriteLine("Invalid target. Goal not created.");
+                    return;
+                }
                 Console.Write("Bonus points: ");
-                int bonus = int.Parse(Console.ReadLine());
+                if (!int.TryParse(Console.ReadLine(), out int bonus))
+                {
+                    Console.WriteLine("Invalid bonus. Goal not created.");
+                    return;
+                }
                 _goals.Add(new ChecklistGoal(name, desc, pts, target, bonus));
                 break;
         }
@@ -92,18 +116,23 @@ public class GoalManager
     {
         ListGoalNames();
         Console.Write("Select goal number to record: ");
-        int index = int.Parse(Console.ReadLine()) - 1;
+        if (!int.TryParse(Console.ReadLine(), out int index))
+        {
+            Console.WriteLine("Invalid input.");
+            return;
+        }
+        index--;
 
         if (index >= 0 && index < _goals.Count)
         {
             _goals[index].RecordEvent();
-            int basePoints = int.Parse(_goals[index]._points);
-            _score += basePoints;
+            _score += _goals[index].Points;
 
             if (_goals[index] is ChecklistGoal checklist && checklist.IsComplete())
             {
-                _score += checklist._bonus;
+                _score += checklist.Bonus;
             }
+
         }
     }
 
@@ -114,7 +143,7 @@ public class GoalManager
             writer.WriteLine(_score);
             foreach (var goal in _goals)
             {
-                writer.WriteLine(goal.GetStringRepresentation());
+                writer.WriteLine(goal.Serialize());
             }
         }
         Console.WriteLine("Goals saved.");
@@ -126,6 +155,13 @@ public class GoalManager
         {
             string[] lines = File.ReadAllLines("goals.txt");
             _score = int.Parse(lines[0]);
+            _goals.Clear();
+
+            for (int i = 1; i < lines.Length; i++)
+            {
+                Goal goal = Goal.Deserialize(lines[i]);
+                if (goal != null) _goals.Add(goal);
+            }
             Console.WriteLine("Goals loaded.");
         }
         else
